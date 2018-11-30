@@ -9,6 +9,14 @@ const toCSV = function(arr) {
 				item.forEach(function(val, index, arr) {
 					if (typeof(val) === 'string') {
 						if ((val.indexOf('\,') !== -1) || (val.indexOf('\"') !== -1) || (val.indexOf('\;') !== -1)) {
+							if (val.indexOf('\"') !== -1) {
+								for (let i = 0; i < val.length; i++) {
+									if (val[i] === '"') {
+										val = [val.slice(0, i), '"', val.slice(i)].join('');
+										i++;
+									}
+								}
+							} 
 							arr[index] = `"${val}"`;
 						} else if (val === '') {
 							arr[index] = `""`;
@@ -114,6 +122,7 @@ const parseCSV = function(csv) {
 	return arr;
 }
 
+// Exports
 module.exports = {
 	parseCSV,
 	toCSV
