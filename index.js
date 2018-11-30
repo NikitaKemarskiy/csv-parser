@@ -1,3 +1,38 @@
+// Create a value to write a new .csv file
+const toCSV = function(arr) {
+	// Array was passed
+	if (Array.isArray(arr)) { 
+		arr.forEach(function(item) {
+			// Array item is array too
+			if (Array.isArray(item)) { 
+				// Convert each column-row value
+				item.forEach(function(val, index, arr) {
+					if (typeof(val) === 'string') {
+						if ((val.indexOf('\,') !== -1) || (val.indexOf('\"') !== -1) || (val.indexOf('\;') !== -1)) {
+							arr[index] = `"${val}"`;
+						} else if (val === '') {
+							arr[index] = `""`;
+						}
+					}
+				});
+			} 
+			// Array item isn't an array -> return error message
+			else {
+				let error = new Error('You should pass array which contains arrays as columns with values');
+				return `Error: ${error.message}`;
+			}
+		});
+		// Creating value for .csv file and return it
+		const csv = arr.join('\n');
+		return csv;
+	} 
+	// The passed value isn't an array -> return error message
+	else {
+		let error = new Error('You should pass array which contains arrays as columns with values');
+		return `Error: ${error.message}`;
+	}
+}
+
 // Convert values from string to number / boolean if it's needed
 const convertVal = function(val) {
 	if (!!Number(val)) {
@@ -79,4 +114,7 @@ const parseCSV = function(csv) {
 	return arr;
 }
 
-module.exports = parseCSV;
+module.exports = {
+	parseCSV,
+	toCSV
+};
